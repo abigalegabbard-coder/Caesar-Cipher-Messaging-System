@@ -18,7 +18,7 @@ def getAlphabet(prompt):
     """Get a nonempty set of characters to use as an alphabet without any duplicate characters"""
     while True:
         user_input = input(prompt)
-        if user_input and len(user_input) == len(set(user_input)):
+        if user_input and len(user_input) == len(set(user_input)): # Checks for all of the characters to be unique
             return user_input
         print("Alphabet cannot be empty or contain duplicate characters!")
 
@@ -32,8 +32,8 @@ def getShift(prompt):
 
 def encrypt(message, alphabet, shift):
     """Encrypt or decrypt the message"""
-    shift = shift % len(alphabet)
-    shifted_alphabet = alphabet[-shift:] + alphabet[:-shift]
+    shift = shift % len(alphabet) # lets the shift be longer than the alphabet
+    shifted_alphabet = alphabet[-shift:] + alphabet[:-shift] # grabs the last letters of the alphabet and moves it towards the front
     translation = str.maketrans(alphabet, shifted_alphabet)
     return message.translate(translation)
 
@@ -50,11 +50,11 @@ def createMessage():
     alphabet = getAlphabet("Enter supported characters: "); shift = getShift("Enter shift: "); message = getMessage("Enter your message: "); encrypted = encrypt(message, alphabet, shift)
     while True:
         filename = input("Enter filename: ")
-        if not filename.endswith(".txt"):
+        if not filename.endswith(".txt"): #checks if it ends with .txt
             print("Filename must end in .txt!")
             continue
         try:
-            with open(filename, "x") as file:
+            with open(filename, "x") as file: # writes the message in the txt file and makes sure said file inputed doesnt exist
                 file.write(f"{alphabet}\n{shift}\n{encrypted}\n")
             print(f"Encrypted message: {encrypted}")
             break
@@ -71,9 +71,9 @@ def createMessage():
 def replyToMessage(filename, alphabet, shift):
     """Encrypt a reply and append it to the file"""
     reply = getMessage("Enter your reply: ")
-    encrypted = encrypt(reply, alphabet, shift)
+    encrypted = encrypt(reply, alphabet, shift) # encrypts the reply and gives it a variable name
     print(f"Encrypted message: {encrypted}")
-    with open(filename, "a") as file:
+    with open(filename, "a") as file: #writes the reply to the message in the txt file
         file.write(f"{encrypted}\n")
     print(f"Message saved to {filename}!")
 
@@ -89,13 +89,11 @@ def displayMessages(lines, alphabet, shift):
 
 def getSettings(lines):
     """Gets and validates the alphabet and shift"""
-    alphabet = lines[0].strip()
-    shift = int(lines[1].strip())
-    if not alphabet or len(alphabet) != len(set(alphabet)):
+    alphabet = lines[0].strip() # removes whitespace
+    shift = int(lines[1].strip()) #also removes whitespace
+    if not alphabet or len(alphabet) != len(set(alphabet)) or len(lines) < 3:
         raise ValueError
-    if len(lines) < 3:
-        raise ValueError
-    return alphabet, shift
+    return alphabet, shift # returns the alphabet and shift
 
 def readMessages():
     """Read a conversation and allow the user to reply"""
@@ -113,5 +111,13 @@ def readMessages():
         except (ValueError, IndexError):
             print("Error: Invalid conversation file.")
             return
-    displayMessages(lines, alphabet, shift)
-    replyToMessage(filename, alphabet, shift)
+    displayMessages(lines, alphabet, shift) # decrypts and prints the test in the txt file on the screen
+    replyToMessage(filename, alphabet, shift) # makes it so that the user can reply to the message
+
+def main():
+    createMessage()
+    readMessages()
+    main_menu()
+
+if __name__ == "__main__":
+    main()
