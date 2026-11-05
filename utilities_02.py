@@ -46,7 +46,7 @@ def getMessage(prompt):
         print("Message cannot be empty!")
 
 def createMessage():
-    """Create a conversation file"""
+    """Creates the text file"""
     alphabet = getAlphabet("Enter supported characters: "); shift = getShift("Enter shift: "); message = getMessage("Enter your message: "); encrypted = encrypt(message, alphabet, shift)
     while True:
         filename = input("Enter filename: ")
@@ -54,7 +54,7 @@ def createMessage():
             print("Filename must end in .txt!")
             continue
         try:
-            with open(filename, "x") as file: # writes the message in the txt file and makes sure said file inputed doesnt exist
+            with open(filename, "x") as file: # writes the message in the txt file and makes sure said file doesnt exist
                 file.write(f"{alphabet}\n{shift}\n{encrypted}\n")
             print(f"Encrypted message: {encrypted}")
             break
@@ -80,12 +80,13 @@ def replyToMessage(filename, alphabet, shift):
 def displayMessages(lines, alphabet, shift):
     """Decrypt and display all messages"""
     print("\nMESSAGES\n--------")
-    for number, message in enumerate(lines[2:], start=1):
+    for number, message in enumerate(lines[2:], start=1): # is the 1. and 2. in displaying the txt file
         message = message.strip()
         decrypted = encrypt(message, alphabet, -shift)
         print(f"{number}. {decrypted}")
     print("\nSupported characters:")
     print(alphabet)
+    print()
 
 def getSettings(lines):
     """Gets and validates the alphabet and shift"""

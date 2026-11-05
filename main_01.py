@@ -9,7 +9,7 @@ def main():
         elif userChoice == 2:
             ut.readMessages()
         elif userChoice == 3:
-            print("Goodbye!")
+            print("Thanks for playing!")
             break
 
 if __name__ == "__main__":
